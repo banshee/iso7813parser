@@ -1,5 +1,5 @@
 {
-  "name": "magstripe-parser",
+  "name": "@banshee.com/iso7813Parser",
   "version": "1.0.0",
   "description": "ISO/IEC 7813 magnetic stripe card data parser using Chevrotain",
   "type": "module",
@@ -18,7 +18,11 @@
   "scripts": {
     "build": "tsc",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prepublishOnly": "pnpm test && pnpm build"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "magstripe",
@@ -26,19 +30,15 @@
     "iso-7813",
     "iso7813",
     "chevrotain",
-    "parser",
-    "track1",
-    "track2",
-    "credit-card",
-    "payment"
+    "parser"
   ],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
-    "chevrotain": "^11.0.0"
+    "chevrotain": "^12.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "typescript": "^5.7.0",
-    "vitest": "^3.0.0"
+    "@types/node": "^26.1.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   }
 }
