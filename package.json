@@ -1,5 +1,5 @@
 {
-  "name": "@banshee.com/iso7813Parser",
+  "name": "@banshee.com/iso7813parser",
   "version": "1.0.0",
   "description": "ISO/IEC 7813 magnetic stripe card data parser using Chevrotain",
   "type": "module",
