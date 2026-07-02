@@ -54,6 +54,7 @@ jobs:
       # Only publish to npm if pushing a tag or if version bumped on main.
       - name: Publish to npm
         run: |
+          npm install -g npm@latest
           if [[ "${{ github.ref }}" == refs/tags/v* ]] || [ "${{ github.event_name }}" == "push" ]; then
             PACKAGE_NAME=$(node -e "const pkg = JSON.parse(require('fs').readFileSync('./package.json', 'utf8')); console.log(pkg.name)")
             PACKAGE_VERSION=$(node -e "const pkg = JSON.parse(require('fs').readFileSync('./package.json', 'utf8')); console.log(pkg.version)")
