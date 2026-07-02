@@ -36,14 +36,19 @@ jobs:
         run: pnpm build
 
       # Only publish to npm if pushing a tag or if version bumped on main.
-      # If the version has not changed, we handle the error gracefully so the action doesn't fail.
       - name: Publish to npm
         run: |
           if [[ "${{ github.ref }}" == refs/tags/v* ]] || [ "${{ github.event_name }}" == "push" ]; then
-            # Check if package is already published to prevent action failure on version collision
             PACKAGE_NAME=$(node -e "const pkg = JSON.parse(require('fs').readFileSync('./package.json', 'utf8')); console.log(pkg.name)")
             PACKAGE_VERSION=$(node -e "const pkg = JSON.parse(require('fs').readFileSync('./package.json', 'utf8')); console.log(pkg.version)")
-            if npm view "$PACKAGE_NAME@$PACKAGE_VERSION" version >/dev/null 2>&1; then
+            
+            # Temporarily disable exit-on-error so npm view failing on a new package doesn't crash the script
+            set +e
+            npm view "$PACKAGE_NAME@$PACKAGE_VERSION" version >/dev/null 2>&1
+            IS_PUBLISHED=$?
+            set -e
+
+            if [ $IS_PUBLISHED -eq 0 ]; then
               echo "Version $PACKAGE_VERSION is already published to npm. Skipping publish."
             else
               echo "Publishing version $PACKAGE_VERSION..."
