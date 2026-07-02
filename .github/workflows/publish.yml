@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       id-token: write
-      contents: read
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -37,6 +37,18 @@ jobs:
 
       - name: Build package
         run: pnpm build
+
+      - name: Configure Git
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump Version
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          pnpm version patch -m "chore: bump version to %s [skip ci]"
+          git push origin main --follow-tags
 
       # Only publish to npm if pushing a tag or if version bumped on main.
       - name: Publish to npm
